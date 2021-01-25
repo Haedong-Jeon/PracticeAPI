@@ -1,6 +1,9 @@
+import 'package:PracticeAPI/detail_page.dart';
 import 'package:PracticeAPI/personalData.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import './custom_transition.dart';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +18,16 @@ class MyApp extends StatelessWidget {
       ),
       theme: ThemeData(
         primarySwatch: Colors.indigo,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CustomPageTransitionBuilder(),
+            TargetPlatform.iOS: CustomPageTransitionBuilder(),
+          },
+        ),
       ),
+      routes: {
+        DetailPage.routeName: (context) => DetailPage(),
+      },
     );
   }
 }
@@ -26,6 +38,11 @@ class APITest extends StatefulWidget {
 }
 
 class _APITestState extends State<APITest> {
+  StreamBuilder<QueryResult> _stream;
+  StreamBuilder<QueryResult> get stream {
+    return _stream;
+  }
+
   String query = """
   query users(\$page: Int, \$limit: Int){
     users(page: \$page, limit: \$limit){
@@ -96,7 +113,7 @@ class _APITestState extends State<APITest> {
 class GraphqlService {
   static final HttpLink httpLink = HttpLink(
     uri: 'https://dummyapi.io/data/graphql',
-    headers: {'app-id': '600bf459ac05ef40cb2ecf1e'},
+    headers: {'app-id': '600d7e386f7ee64240b1b707'},
   );
   final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(
     GraphQLClient(

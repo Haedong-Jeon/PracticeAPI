@@ -1,3 +1,4 @@
+import 'package:PracticeAPI/detail_page.dart';
 import 'package:flutter/material.dart';
 import './userData.dart';
 
@@ -9,20 +10,35 @@ class PersonalData extends StatelessWidget {
   PersonalData({this.firstName, this.lastName, this.email, this.imgURL});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: Card(
-        elevation: 5,
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-              imgURL,
+    Map<String, String> args = {
+      'title': '$firstName $lastName',
+      'imageUrl': imgURL,
+    };
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          DetailPage.routeName,
+          arguments: args,
+        );
+      },
+      child: Container(
+        height: 100,
+        child: Card(
+          elevation: 5,
+          child: ListTile(
+            leading: Hero(
+              tag: '$firstName $lastName',
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  imgURL,
+                ),
+              ),
             ),
-          ),
-          title: UserData(
-            email: email,
-            firstName: firstName,
-            lastName: lastName,
+            title: UserData(
+              email: email,
+              firstName: firstName,
+              lastName: lastName,
+            ),
           ),
         ),
       ),
